@@ -1,0 +1,30 @@
+name: CI
+on:
+#провертка при пуше в соотв. ветки
+  push:
+    branches: [ feature/dev1, dev1 ]
+  #провертка при пул-р. в соотв. ветки
+  pull_request:
+    branches: [ dev1 ]
+  #workflow_dispatch:
+jobs:
+  build:
+  #операционная система виртуальной машины
+    runs-on: ubuntu-latest
+    #шаги проверки
+    steps:
+    #загружает копию репозитория на вирт. машину
+      - uses: actions/checkout@v3
+      #имя шага сборки
+      - name: Set up JDK 11
+       #загружает на вирт. машину компилятор для JAVA кода, базовые библиотеки java и тд
+        uses: actions/setup-java@v3
+        with:
+        #версия java
+          java-version: '11'
+          #название дистрибутива JDK, в него входят обновленные версии компилятор, библиотек и тд.
+          distribution: 'adopt'
+      #Maven - фреймворк для автоматизации сборки проектов на основе описания их структуры в файлах
+      - name: Build with Maven
+      #запускает сборку проекта с помощью Maven
+        run: mvn --batch-mode --update-snapshots package
